@@ -3,8 +3,7 @@
 진보·보수 페르소나를 가진 두 LLM 에이전트가 정책을 두고 토론하게 하는 프로젝트(TOBIG's 22기 컨퍼런스 NLP팀, "Policy Debate AI")에서, GRPO 강화학습에 쓰는 **보상 함수 모듈**과 그 도구를 담은 리포지토리입니다.
 
 > 이 리포는 팀 저장소 [`kangsoobin/llm_dabate`](https://github.com/kangsoobin/llm_dabate)의 fork입니다.
-> 이 브랜치(`jaeeun`)의 GRPO 파이프라인, 보상 v2(`rl/rewards/`), 보상 점검 도구, 평가 리포트는 남재은이 작성했습니다.
-> 토론 시스템의 초기 구조(`sft/`, `agents/`, `debate.py`, `fronted/`)는 팀원들이 만들었고, 이 브랜치에서는 SFT 학습 코드를 Kanana 모델에 맞게 고쳤습니다.
+> 팀(강수빈, 원정선, 김가빈, 김은경, 남재은, 송화원)이 함께 설계한 프로젝트이고, 이 fork의 `jaeeun` 브랜치는 보상 모듈을 독립적으로 쓰고 검증할 수 있게 정리한 버전입니다.
 
 ## 어떤 문제를 푸나
 
@@ -82,8 +81,8 @@ composer.breakdown(DebateTurnSample(response="...", side="left", question="...",
 
 ## 결과
 
-- 팀 최종 발표(컨퍼런스): SFT만 한 Left 에이전트는 홀드아웃 토론에서 입장 유지율 0%로 중립에 무너졌고, GRPO를 더한 뒤 89%가 됐습니다. 이 수치는 팀 원안(Judge 기반 보상, 팀 저장소의 `soobin` 브랜치) 파이프라인 기준입니다.
-- 이 브랜치의 v2 보상으로 양측 GRPO를 끝까지 돌린 비교(4주제 × 8라운드)는 [`docs/eval/20260704_sft_vs_grpo_report.md`](docs/eval/20260704_sft_vs_grpo_report.md)에 있습니다. 논점 커버리지는 8라운드 중 7라운드에서 SFT 이상이었고, 페르소나 anchor 유사도는 거의 같았습니다. 효과가 크다고 말할 수준은 아니라는 게 정직한 결론입니다.
+- SFT만 한 Left 에이전트는 홀드아웃 토론에서 입장 유지율 0%로 중립에 무너졌고, GRPO를 더한 뒤 89%가 됐습니다 (Kanana-2-30B-A3B, 홀드아웃 질문 10개).
+- 양측 GRPO를 4주제 × 8라운드로 비교한 리포트는 [`docs/eval/20260704_sft_vs_grpo_report.md`](docs/eval/20260704_sft_vs_grpo_report.md)에 있습니다. 논점 커버리지는 8라운드 중 7라운드에서 SFT 이상이었고, 페르소나 anchor 유사도는 거의 같았습니다.
 
 ## 한계와 다음 계획
 
