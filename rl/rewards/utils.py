@@ -19,12 +19,24 @@ Judge 없이(judge-free) 계산 가능한 보상 컴포넌트들이 공유하는
 from __future__ import annotations
 
 import re
-from typing import Optional
+import sys
 
 # 형태소 분석기 fallback용 최소 불용어(조사/서술어성 어미) 근사 목록.
 _STOPWORDS = {
-    "그리고", "그러나", "하지만", "따라서", "때문에", "그런데", "그래서",
-    "있다", "없다", "합니다", "입니다", "것이다", "것입니다", "합니다만",
+    "그리고",
+    "그러나",
+    "하지만",
+    "따라서",
+    "때문에",
+    "그런데",
+    "그래서",
+    "있다",
+    "없다",
+    "합니다",
+    "입니다",
+    "것이다",
+    "것입니다",
+    "합니다만",
 }
 
 _TOKEN_RE = re.compile(r"[가-힣A-Za-z0-9]+")
@@ -50,7 +62,8 @@ def _get_kiwi():
         _KIWI_FAILED = True
         print(
             "[rl.rewards.utils] kiwipiepy가 없어 어절 정규식 토큰화로 fallback합니다 — "
-            "한국어 key-point coverage 정확도가 크게 떨어지므로 `uv pip install kiwipiepy` 권장."
+            "한국어 key-point coverage 정확도가 크게 떨어지므로 `uv pip install kiwipiepy` 권장.",
+            file=sys.stderr,
         )
     return _KIWI
 
@@ -60,11 +73,7 @@ def tokenize(text: str) -> list[str]:
     kiwi = _get_kiwi()
     if kiwi is None:
         return [t for t in _TOKEN_RE.findall(text) if t not in _STOPWORDS and len(t) > 1]
-    return [
-        tok.form
-        for tok in kiwi.tokenize(text)
-        if tok.tag.startswith(_CONTENT_TAGS) and len(tok.form) > 1
-    ]
+    return [tok.form for tok in kiwi.tokenize(text) if tok.tag.startswith(_CONTENT_TAGS) and len(tok.form) > 1]
 
 
 def jaccard_similarity(text: str, history: list[str]) -> float:
@@ -87,11 +96,7 @@ def extract_key_points(text: str, top_n: int = 8) -> set[str]:
     if kiwi is None:
         tokens = tokenize(text)
     else:
-        tokens = [
-            tok.form
-            for tok in kiwi.tokenize(text)
-            if tok.tag.startswith(_NOUN_TAGS) and len(tok.form) > 1
-        ]
+        tokens = [tok.form for tok in kiwi.tokenize(text) if tok.tag.startswith(_NOUN_TAGS) and len(tok.form) > 1]
     freq: dict[str, int] = {}
     for tok in tokens:
         freq[tok] = freq.get(tok, 0) + 1
@@ -123,7 +128,7 @@ class SentenceEmbedder:
     def __init__(
         self,
         model_id: str = "BAAI/bge-m3",
-        device: Optional[str] = None,
+        device: str | None = None,
     ) -> None:
         self.model_id = model_id
         self.device = device

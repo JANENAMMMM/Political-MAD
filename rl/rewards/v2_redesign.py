@@ -21,7 +21,7 @@ judge 없이도(judge=None) 전부 동작하도록 설계됨 — Judge Ceiling �
 
 from __future__ import annotations
 
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from .base import DebateTurnSample
 from .judge import Judge
@@ -39,7 +39,7 @@ class PersonaConsistencyReward:
         anchor_texts: dict[str, list[str]],
         lambda_syc: float = 1.0,
         syc_coverage_gate: bool = True,
-        judge: Optional[Judge] = None,
+        judge: Judge | None = None,
         judge_aux_weight: float = 0.0,
     ) -> None:
         self.embedder = embedder
@@ -103,7 +103,7 @@ class EngagementReward:
 
     name = "engagement"
 
-    def __init__(self, judge: Optional[Judge] = None, judge_weight: float = 0.0) -> None:
+    def __init__(self, judge: Judge | None = None, judge_weight: float = 0.0) -> None:
         self.judge = judge
         self.judge_weight = judge_weight if judge is not None else 0.0
 
@@ -128,9 +128,7 @@ class DiversityReward:
 
     def __call__(self, sample: DebateTurnSample) -> float:
         sim_opponent = (
-            self.embedder.cos_sim(sample.response, sample.opponent_response)
-            if sample.opponent_response
-            else 0.0
+            self.embedder.cos_sim(sample.response, sample.opponent_response) if sample.opponent_response else 0.0
         )
         sim_self = 0.0
         for past in sample.own_history:
@@ -163,7 +161,7 @@ class GroundingReward:
 
     name = "grounding"
 
-    def __init__(self, nli_scorer: Optional[Callable[[str, str], float]] = None) -> None:
+    def __init__(self, nli_scorer: Callable[[str, str], float] | None = None) -> None:
         self.nli_scorer = nli_scorer
 
     def __call__(self, sample: DebateTurnSample) -> float:
@@ -199,7 +197,7 @@ def _load_anchor_texts(cfg: dict, base_dir: str | None = None) -> dict[str, list
     return result
 
 
-def build_v2_components(judge: Optional[Judge], cfg: dict) -> list[tuple]:
+def build_v2_components(judge: Judge | None, cfg: dict) -> list[tuple]:
     """cfg == config/reward.yaml 의 v2 섹션. 반환값: [(component, weight), ...]"""
     weights = cfg.get("weights", {})
     embedder = SentenceEmbedder(model_id=cfg.get("embedding_model", "BAAI/bge-m3"))

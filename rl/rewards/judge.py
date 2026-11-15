@@ -19,7 +19,6 @@ from __future__ import annotations
 import abc
 import json
 import os
-from typing import Optional
 
 
 class Judge(abc.ABC):
@@ -128,9 +127,7 @@ class LocalJudge(Judge):
         return float(max(-1.0, min(1.0, result.get("score", 0.0))))
 
     def score_rebuttal(self, opponent_text: str, response_text: str) -> int:
-        result = self._generate_json(
-            _REBUTTAL_PROMPT.format(opponent_text=opponent_text, response_text=response_text)
-        )
+        result = self._generate_json(_REBUTTAL_PROMPT.format(opponent_text=opponent_text, response_text=response_text))
         return int(max(1, min(5, result.get("score", 3))))
 
 
@@ -198,13 +195,11 @@ class APIJudge(Judge):
         return float(max(-1.0, min(1.0, result.get("score", 0.0))))
 
     def score_rebuttal(self, opponent_text: str, response_text: str) -> int:
-        result = self._ask(
-            _REBUTTAL_PROMPT.format(opponent_text=opponent_text, response_text=response_text)
-        )
+        result = self._ask(_REBUTTAL_PROMPT.format(opponent_text=opponent_text, response_text=response_text))
         return int(max(1, min(5, result.get("score", 3))))
 
 
-def build_judge(cfg: dict) -> Optional[Judge]:
+def build_judge(cfg: dict) -> Judge | None:
     """
     config/reward.yaml의 judge 섹션으로부터 Judge 인스턴스를 생성한다.
     backend가 "none"이면 None을 반환 — judge 없이 judge-free 컴포넌트만 사용.
