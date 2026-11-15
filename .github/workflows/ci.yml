@@ -1,0 +1,26 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install ${{ matrix.python-version }}
+      - name: Install (core + dev only, no GPU deps)
+        run: uv sync --python ${{ matrix.python-version }}
+      - name: Lint
+        run: uv run ruff check
+      - name: Format check
+        run: uv run ruff format --check
+      - name: Test
+        run: uv run pytest -q
+      - name: CLI smoke test
+        run: uv run mad-reward score --components novelty,engagement tests/data/turns.jsonl
