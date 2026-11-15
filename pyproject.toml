@@ -1,0 +1,43 @@
+[project]
+name = "political-mad"
+version = "0.1.0"
+description = "Judge-free reward components and GRPO tooling for multi-agent political debate"
+readme = "README.md"
+requires-python = ">=3.10"
+# Core reward module only needs these. Heavy deps are optional groups below
+# and are imported lazily, so tests and the CLI run without a GPU.
+dependencies = [
+  "numpy>=1.26",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+ko = ["kiwipiepy>=0.18"]                       # Korean morpheme tokenizer (falls back to regex)
+embed = ["sentence-transformers>=3.0"]         # R_persona / R_diversity embeddings
+train = ["torch", "transformers>=4.51", "peft", "trl>=1.7", "datasets", "vllm"]
+
+[project.scripts]
+mad-reward = "rl.rewards.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["rl", "rl.rewards"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+# Lint scope = the reward library, its CLI and tests. Research scripts stay out for now.
+include = ["rl/rewards/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "UP037"]
