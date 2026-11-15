@@ -14,7 +14,7 @@ rl/compare_debates.py — SFT vs GRPO 어댑터 토론 정성/정량 비교
     python rl/compare_debates.py --a rl/data/eval_sft.jsonl --b rl/data/eval_grpo.jsonl \
         --label-a SFT --label-b GRPO
 
-readme.md '검증 방법'의 지표를 자동화한 것:
+docs/RUNBOOK.md '검증 방법'의 지표를 자동화한 것:
     1. 중립·양시론 표현 빈도 (낮을수록 좋음 — Default Bias 억제 목표)
     2. 라운드별 페르소나 anchor 유사도 (라운드가 가도 유지되는지 — R_persona 목표)
     3. 라운드별 상대 논점 커버리지 (논점 교전도 — R_engagement 목표)
@@ -38,7 +38,7 @@ import yaml  # noqa: E402
 from rl.rewards.utils import SentenceEmbedder, jaccard_similarity, key_point_coverage  # noqa: E402
 from rl.rewards.v2_redesign import _load_anchor_texts  # noqa: E402
 
-# readme.md '정성 검증' 목록 + 변형
+# docs/RUNBOOK.md '정성 검증' 목록 + 변형
 NEUTRAL_PATTERNS = [
     "양쪽 다 일리", "양측 모두 일리", "둘 다 일리",
     "균형 잡힌", "균형있", "균형 있",

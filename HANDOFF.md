@@ -219,7 +219,7 @@ python rl/train_grpo.py --side left --gpu 0 --use-vllm --transcripts rl/data/tra
 ## 5. 참고 문서
 
 - [`CLAUDE.md`](CLAUDE.md) — 아키텍처 개요, 모듈 책임, 알려진 이슈
-- [`readme.md`](readme.md) — Phase 1(SFT)/Phase 2(GRPO) 실행 순서, 검증 방법
+- [`docs/RUNBOOK.md`](docs/RUNBOOK.md) — Phase 1(SFT)/Phase 2(GRPO) 실행 순서, 검증 방법
 - [`docs/reward_design_v2.md`](docs/reward_design_v2.md) — 보상 설계 v1 vs v2 근거, 논문 인용
 - [`보상 설계.pdf`](../보상%20설계.pdf), [`투빅스_컨퍼런스 중간발표_NLP.pdf`](../투빅스_컨퍼런스%20중간발표_NLP.pdf), [`평가 데이터셋.pdf`](../평가%20데이터셋.pdf) — 프로젝트 방향성 원본 자료
 

@@ -45,7 +45,7 @@ from rl.rewards.v2_redesign import _load_anchor_texts  # noqa: E402
 N_SAMPLES = 40
 MARGIN = 0.03  # 평균 cos-sim 분리 최소 마진 (bge 계열은 유사도 분포가 좁아 절대값은 작게 설정)
 
-# 우리가 SFT/RL로 억제하려는 전형적 중립·양시론 발언 (readme.md '정성 검증' 목록 기반)
+# 우리가 SFT/RL로 억제하려는 전형적 중립·양시론 발언 (docs/RUNBOOK.md '정성 검증' 목록 기반)
 NEUTRAL_RESPONSES = [
     "이 문제는 양쪽 모두 일리가 있다고 생각합니다. 진보와 보수의 주장을 균형 있게 검토해야 합니다.",
     "균형 잡힌 시각으로 보면 어느 한쪽이 옳다고 단정하기 어려운 복잡한 문제입니다.",
